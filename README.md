@@ -49,7 +49,36 @@ are removed, and the new definitions are called.
 
 Copy the docs from symbols `sym1`, `sym2`, etc of module `Module` to the symbols in the current context.
 
+# `@def`
 
+This macro doesn't have anything to do with the package, but I use it, and it's here, so it's exported.
+
+It's just a macro to force good habits and make it easier to test internal functions.
+
+```julia
+@def wash """
+    wash(shirt::Int)
+
+Do the washing up.
+""" begin
+    @test wash(3) == "Clean"
+    @test wash(4) == "Still dirty"
+    @test wash(10) == "Blergh"
+end function wash(shirt::Int)
+    shirt < 4 && return "Clean"
+    shirt < 8 && return "Still dirty"
+    return "Blerg"
+end
+
+This defines `wash` and its docs. Furthermore, if `capture_tests(true)` was run before this code,
+also those tests were stored.
+
+`@inline_testall` tests all the functions for the current module.
+
+`@inline_testall Mod` tests all the functions for module `Mod`
+
+`@inline_test f` tests the function `f`
+```
 
 @lazyinclude, @lazydepends, @once, @redirect, @copy_docs
 

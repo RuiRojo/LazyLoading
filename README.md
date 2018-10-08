@@ -50,17 +50,22 @@ This creates definitions for `plot` and `surf` that redirect its arguments to `P
 
 ### `@once`
 
-Set up definitions for `sigiatures` that run `code` only the first time
-they are called. The methods are deleted as soon as entering.
+```julia
+@once f(::Int) f(x, y) begin
+    println("First")
+end
+```
+
+
+Set up definitions for `f(::Int)` and `f(x, y)` that run the specified only the first time
+these methods are called. The methods are deleted as soon as entering.
 
 
 The code can use the function `_recurse()` to run 
 the same function with the same arguments provided. This is meant for the
-use case where you redefine the function while in the body.
+use case where you redefine the function while in the body. `_recurse()` uses
+`Base.invokelatest`.
 
-```julia
-
-```
 
 ### `@copy_docs`
 

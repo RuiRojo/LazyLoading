@@ -12,14 +12,14 @@ Define the function to preload packages on first use.
 
 
 ```julia
-@lazydepends Pkg1 Pkg2 ->
-function lala(x)
-    [...]
+@lazydepends Plots Plits ->
+function plah(x)
+    plot(sin, 0, x, xlims = Plits.yeye)
 end
 ```
 
-This defined `lala(x)` in such a way that it can use stuff from `Pkg1` or `Pkg2`, but
-only runs `using Pkg1` and `using Pkg2` on the first use of `lala(x)`.
+This defines `plah(x)` in such a way that it can use stuff from `Plots` and `Plits`, but
+only runs `using Plots` and `using Plits` on the first use of `plah(x)`.
 
 #### Example
 
@@ -104,12 +104,49 @@ also those tests were stored.
 
 ## Usage example
 
+Say you have a package "Pkg.jl" that needs "Plots.jl" his plotting functions, but it is often the case
+that the user doesn't need to plot anything, and "Plots.jl" for some reason takes too long to load.
 
-@lazyinclude, @lazydepends, @once, @redirect, @copy_docs
+You could have a separate file "Plotting.jl" with all the plotting functionality is implemented.
 
-@lazyinclude joinpath(@__DIR__, "Plot.jl") plot plot! default surf imagesc histogram heatmap specplot zplane scatter stem vline
-@copy_docs Plots plot plot! surf imagesc histogram heatmap scatter vline default
-export plot, plot!, surf, imagesc, histogram, heatmap, specplot, zplane, scatter, stem, vline, default
+Then, in "Pkg.jl"
 
+```julia
+@lazyinclude joinpath(@__DIR__, "Plotting.jl") plot_this plot surf
+@copy_docs Plots plot surf
+```
 
-and in "Plot.jl", @redirect Plots plot plot! surf imagesc histogram heatmap scatter vline default
+The first line defines `plot_this`, `plot` and `surf`, to include "Plotting.jl" on first usage and then re-run. 
+
+I don't remember whether the explicit `@__DIR__` is necessary. It seems at some point it was.
+
+The second line adds the docs of `Plots.plot` and `Plots.surf` to the local symbols.
+
+Then, on "Plotting.jl"
+
+```
+export plot_this, plot, surf
+
+@redirect Plots plot surf
+
+function plot_this(x)
+    println(x)
+    return """
+                        `. ___
+                        __,' __`.                _..----....____
+            __...--.'``;.   ,.   ;``--..__     .'    ,-._    _.-'
+    _..-''-------'   `'   `'   `'     O ``-''._   (,;') _,'
+    ,'________________                          \`-._`-','
+    `._              ```````````------...___   '-.._'-:
+        ```--.._      ,.                     ````--...__\-.
+                `.--. `-`                       ____    |  |`
+                `. `.                       ,'`````.  ;  ;`
+                    `._`.        __________   `.      \'__/`
+                    `-:._____/______/___/____`.     \  `
+                                |       `._    `.    \
+                                `._________`-.   `.   `.___
+                                                SSt  `------'`
+    """
+```
+
+The `@redirect` line creates the final definitions of `plot` and `surf` that will delegate to `Plots.plot` and `Plots.surf`.

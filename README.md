@@ -4,8 +4,9 @@ This is very much a WIP that I had sketched for personal use and learning about 
 
 Needs to be documented, tested, improved, etc etc
 
+## Functions
 
-# `@lazydepends`
+### `@lazydepends`
 
 Define the function to preload packages on first use.
 
@@ -20,11 +21,11 @@ end
 This defined `lala(x)` in such a way that it can use stuff from `Pkg1` or `Pkg2`, but
 only runs `using Pkg1` and `using Pkg2` on the first use of `lala(x)`.
 
-## Example
+#### Example
 
 
 
-# `@lazyinclude`
+### `@lazyinclude`
 
 ```julia
 @lazyinclude "path/to/script.jl" sym1 sym2
@@ -36,12 +37,32 @@ It is assumed that `sym1`, `sym2` are defined in that script, so the catch-all d
 are removed, and the new definitions are called.
 
 
-# `@redirect`
+### `@redirect`
+
+Create catch-all definitions that link to the specified module
+
+```julia
+@redirect Plots plot surf
+```
+
+This creates definitions for `plot` and `surf` that redirect its arguments to `Plots.plot` and `Plots.surf`.
 
 
-# `@once`
+### `@once`
 
-# `@copy_docs`
+Set up definitions for `sigiatures` that run `code` only the first time
+they are called. The methods are deleted as soon as entering.
+
+
+The code can use the function `_recurse()` to run 
+the same function with the same arguments provided. This is meant for the
+use case where you redefine the function while in the body.
+
+```julia
+
+```
+
+### `@copy_docs`
 
 ```julia    
     @copy_docs Module sym1 sym2    
@@ -49,7 +70,7 @@ are removed, and the new definitions are called.
 
 Copy the docs from symbols `sym1`, `sym2`, etc of module `Module` to the symbols in the current context.
 
-# `@def`
+### `@def`
 
 This macro doesn't have anything to do with the package, but I use it, and it's here, so it's exported.
 
@@ -79,6 +100,10 @@ also those tests were stored.
 
 `@inline_test f` tests the function `f`
 ```
+
+
+## Usage example
+
 
 @lazyinclude, @lazydepends, @once, @redirect, @copy_docs
 

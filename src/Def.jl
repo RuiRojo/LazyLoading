@@ -1,4 +1,4 @@
-export capture_tests, @def, @inline_test, @inline_testall, @test, @testset, Test
+export capture_tests, @def, @inline_test, @inline_testall, @test, @testset, Test, @clearfun
 
 
 "Tests the function `f` for which tests were defined through `@def`"
@@ -79,6 +79,26 @@ function def(fname, docstr, testcode, code)
         tfun() = let; $(esc(testset)); end
         push!($(esc(:TESTS)), $fesc => tfun)
         @doc $docstr $fname
+        nothing
+    end
+end
+
+
+
+"""
+    clearfun(f)
+
+Clear methods of `f`.
+"""
+macro clearfun(fs)
+    isdef = Expr(:isdefined, esc(fs))
+    return quote
+        if $isdef
+            # delete the methods
+            for m in methods($(esc(fs))); delete_method(m); end
+            # delete the tests
+            delete!(TESTS, $(esc(fs)))
+        end
         nothing
     end
 end

@@ -58,7 +58,7 @@ end
 
 
 Set up definitions for `f(::Int)` and `f(x, y)` that run the specified only the first time
-these methods are called. The methods are deleted as soon as entering.
+ANY of these methods are called. Both methods are deleted as soon as entering.
 
 
 The code can use the function `_recurse()` to run 
@@ -106,6 +106,9 @@ also those tests were stored.
 `@inline_test f` tests the function `f`
 ```
 
+### `@clearfun`
+
+`@clearfun f` clears the methods for `f`.
 
 ## Usage example
 

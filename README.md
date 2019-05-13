@@ -21,8 +21,6 @@ end
 This defines `plah(x)` in such a way that it can use stuff from `Plots` and `Plits`, but
 only runs `using Plots` and `using Plits` on the first use of `plah(x)`.
 
-#### Example
-
 
 
 ### `@lazyinclude`

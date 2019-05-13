@@ -2,7 +2,7 @@
 
 This is very much a WIP that I had sketched for personal use and learning about macros.
 
-Needs to be documented, tested, improved, etc etc
+Needs to be documented, tested, improved, etc etc. I wouldn't be surprised if its functionality is unnecessary or superseeded by other packages.
 
 ## Functions
 
@@ -95,6 +95,7 @@ end function wash(shirt::Int)
     shirt < 8 && return "Still dirty"
     return "Blerg"
 end
+```
 
 This defines `wash` and its docs. Furthermore, if `capture_tests(true)` was run before this code,
 also those tests were stored.
@@ -104,7 +105,6 @@ also those tests were stored.
 `@inline_testall Mod` tests all the functions for module `Mod`
 
 `@inline_test f` tests the function `f`
-```
 
 ### `@clearfun`
 
